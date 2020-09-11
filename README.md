@@ -25,7 +25,7 @@ A self confiscated django project, aimed towards making a  Room-Slot-Booking web
  
  &nbsp; -> Room Manager can view a <b> summary of all bookings, occupancies </b> and <b> occupant customer details. </b> <br>
    
- &nbsp; -> <b> The customer can see all of his own (past and future) bookings, occupancies and room manager. </b> <br>
+ &nbsp; -> The customer can see all of his own <b> (past and future) bookings, occupancies </b> and <b> room manager. </b> <br>
 
 Technologies Used :<br><br>
 
