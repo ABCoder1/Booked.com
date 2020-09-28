@@ -1,0 +1,50 @@
+.{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body{
+	background-color: #000000;
+}
+
+#AnimatedTitle{
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#p1{
+	font-size: 3rem;
+	font-weight: bold;
+	letter-spacing: 0.1rem;
+	text-align: center;
+	overflow: hidden;
+	padding: 0.5rem;
+}
+
+#typed-heading{
+	font-weight: normal;
+	color: #9d4ae0;
+	font-size: 15rem;
+}
+
+.cursor{
+	display: inline-block;
+	width: 3px;
+	background-color: #ccc;
+	margin-left: 0.1rem;
+	animation: blink 1s infinite;
+	font-size: 15rem;
+}
+
+.cursor.typing{
+	animation: none;
+}
+
+@keyframes blink{
+	0% { background-color: #ccc; }
+	50% { background-color: transparent; }
+	100% { background-color: #ccc; }
+}
