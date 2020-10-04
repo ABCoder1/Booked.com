@@ -4,18 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booked</title>
-    <link rel="stylesheet" href="MainPage.css">
 </head>
 <body>
 	<div id="AnimatedTitle">
-    	<!-- <h1> BOOKED.COM </h1> -->
 
     	<p id="p1"> <span id="typed-heading"><!-- BOOKED.COM --></span><span class="cursor">&nbsp</span>  </p> 
+
+
 	</div>
 
-    <h2> This is what you're gonna see, when you open this website</h2>
+    <p> This is what you're gonna see, when you open this website </p>
 
+    <div id="Info">
+        {% if user.is_authenticated %}
+        <p> You are logged in as {{user.username}} </p>
 
-    <script src="MainPage.js"></script>
+        {% else %}
+        <p> You are'nt logged in. </p>
+
+        {% endif %}
+    </div>
+
+    {% load static %}
+    <script src="{% static "HomePage/MainPage.js" %}"></script>
+    <link rel="stylesheet" href="{% static "HomePage/MainPage.css" %}">
+
 </body>
 </html>

@@ -9,25 +9,30 @@ body{
 }
 
 #AnimatedTitle{
-	height: 100vh;
+	height: 200px;
 	display: flex;
-	justify-content: center;
+	border-style: solid;
+	border-color: purple;
+	/*justify-content: center;*/
 	align-items: center;
 }
 
 #p1{
-	font-size: 3rem;
+	font-size: 3px;
 	font-weight: bold;
 	letter-spacing: 0.1rem;
 	text-align: center;
 	overflow: hidden;
 	padding: 0.5rem;
+	margin-left: auto;
+  	margin-right: auto;
 }
 
 #typed-heading{
 	font-weight: normal;
+	text-align: center;
 	color: #9d4ae0;
-	font-size: 15rem;
+	font-size: 7rem;
 }
 
 .cursor{
@@ -36,11 +41,30 @@ body{
 	background-color: #ccc;
 	margin-left: 0.1rem;
 	animation: blink 1s infinite;
-	font-size: 15rem;
+	font-size: 8rem;
+/*	margin-left: auto;
+  	margin-right: auto;*/
 }
 
 .cursor.typing{
 	animation: none;
+}
+
+#Info{
+	height: 200px;
+	display: flex;
+	border-style: solid;
+	border-color: purple;
+	/*justify-content: center;*/
+	align-items: center;
+}
+
+p {
+	color: white;
+	margin: 15%;
+	text-align: center;
+/*	border-style: solid;
+	border-color: purple;*/
 }
 
 @keyframes blink{
