@@ -6,7 +6,10 @@
     <title>Register</title>
 </head>
 <body>
+    <div id="headingDiv">
 	<h1>Registration Page</h1>
+    <div>
+    
     <form method="POST" action="{% url 'register' %}">
         {% csrf_token %}
 
@@ -16,8 +19,11 @@
 
         {{ form }}
 
-        <br>
+        <br><br>
         <input type="submit" value="Register"> 
+
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static "registration/register.css" %}">
     </form>
 </body>
 </html>

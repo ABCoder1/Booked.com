@@ -1,0 +1,36 @@
+.{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body{
+	background-color: white;
+}
+
+#headingDiv{
+	height: 100px;
+	border-style: solid;
+	border-color: purple;
+}
+
+h1{
+	color: purple;
+/*	border-style: solid;
+	border-color: purple;*/
+	align-items: center;
+	text-align: center;
+	size: 
+}
+
+p {
+	color: black;
+	margin: 15%;
+	text-align: center;
+}
+
+form{
+	margin-top: 8%;
+	text-align: center;
+	border: 2px purple solid;
+}
