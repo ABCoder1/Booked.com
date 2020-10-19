@@ -5,8 +5,11 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 def MainPage(request):
     return render(request, 'Homepage/MainPage.html')
+
+def Login(request):
+    return render(request, 'registration/login.html')
     
-def register(request):
+def Register(request):
     if request.method == 'POST' :
         form = UserCreationForm(request.POST)
 
@@ -21,4 +24,3 @@ def register(request):
         form = UserCreationForm()
         context = {'form' : form}
         return render(request, 'registration/register.html', context)
-

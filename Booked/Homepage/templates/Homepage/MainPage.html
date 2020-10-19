@@ -15,6 +15,10 @@
 
     <p> This is what you're gonna see, when you open this website </p>
 
+    <p> <button> <a href="{% url 'login' %}">Login</a> </button> </p>
+    <p> <button> <a href="{% url 'register'%}">Register</a> </button> </p>
+
+
     <div id="Info">
         {% if user.is_authenticated %}
         <p> You are logged in as {{user.username}} </p>
