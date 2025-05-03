@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booked</title>
+</head>
+<body>
+    <p> Room Manager Login </p>
+
+    <p> <button> <a href="{% url 'booking:get_all_rooms' %}">Get All Rooms for this Manager</a> </button> </p>
+    <p> <button> <a href="{% url 'booking:add_room' %}"> Create a Room </a> </button> </p>
+    <p> <button> <a href="{% url 'booking:get_all_rooms' %}"> Update a Room </a> </button> </p>
+    <p> <button> <a href="{% url 'booking:get_all_rooms' %}"> Delete a Room </a> </button> </p>
+
+    {% load static %}
+    <script src="{% static "user/room_manager.js" %}"></script>
+    <link rel="stylesheet" href="{% static "user/room_manager.css" %}">
+
+</body>
+</html>
