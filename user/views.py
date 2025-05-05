@@ -1,11 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+import logging
 from uuid import uuid4
 from urllib.parse import parse_qs
 from .models import User, user_types
-from .serializers import UserCreateSerializer, UserReadSerializer, UserUpdateSerializer
-from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-import logging
+from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets, permissions, status
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .serializers import UserCreateSerializer, UserReadSerializer, UserUpdateSerializer
 
 logger_name = "root"
 
@@ -13,9 +14,8 @@ logger_name = "root"
 
 # User ViewSet for basic CRUD Handling
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
-    
+
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
             return UserReadSerializer
@@ -23,17 +23,27 @@ class UserViewSet(viewsets.ModelViewSet):
             return UserUpdateSerializer
         return UserCreateSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'POST':  # POST = create
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
+    def get_authenticators(self):
+        if self.request.method == 'POST':  # POST = create
+            return []
+        return [JWTAuthentication()]
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        response_serializer =  UserReadSerializer(user)
+        response_serializer = UserReadSerializer(user)
         headers = self.get_success_headers(response_serializer.data)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)  # Handling partial updates (PATCH)
-        instance = self.get_object() # Gets the user object we are updating from DB
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -50,50 +60,50 @@ def register(request):
 def login(request):
     return render(request=request, template_name='user/login.html')
 
-def index(request, user):
-    return render(request=request, template_name='user/index.html', context={'user':user})
+def index(request):
+    return render(request=request, template_name='user/index.html')
 
 # def register(request):
-    # logger = logging.getLogger(logger_name)
-    # if request.method == 'POST' :
-    #     if request.headers.get('Content-Length') != '':
-    #         params = parse_qs(request.body)
-    #         string_params = {}
-    #         for key, val in params.items() :
-    #             string_params[key.decode('utf-8')] = [val_n.decode('utf-8') for val_n in val]
+#     logger = logging.getLogger(logger_name)
+#     if request.method == 'POST' :
+#         if request.headers.get('Content-Length') != '':
+#             params = parse_qs(request.body)
+#             string_params = {}
+#             for key, val in params.items() :
+#                 string_params[key.decode('utf-8')] = [val_n.decode('utf-8') for val_n in val]
             
-    #         try:
-    #             existing_user = User.objects.get(username=string_params['username'][0])
-    #             logger.error('username already exists : ', existing_user.username)
-    #             return render(request=request, template_name='user/register.html', context={'validation':'username already exists, please try something else'})
-    #         except User.DoesNotExist:
-    #             type_param = string_params["user_type"][0]
-    #             if type_param == 'customer' :
-    #                 type_for_user = user_types.CR
-    #             elif type_param == 'manager' :
-    #                 type_for_user = user_types.RM
-    #             else :
-    #                 return render(request=request, template_name='user/register.html', context={'validation':'invalid user type, please try again'})
+#             try:
+#                 existing_user = User.objects.get(username=string_params['username'][0])
+#                 logger.error('username already exists : ', existing_user.username)
+#                 return render(request=request, template_name='user/register.html', context={'validation':'username already exists, please try something else'})
+#             except User.DoesNotExist:
+#                 type_param = string_params["user_type"][0]
+#                 if type_param == 'customer' :
+#                     type_for_user = user_types.CR
+#                 elif type_param == 'manager' :
+#                     type_for_user = user_types.RM
+#                 else :
+#                     return render(request=request, template_name='user/register.html', context={'validation':'invalid user type, please try again'})
                 
-    #             data = {
-    #                 'id':uuid4().hex,
-    #                 'name':string_params["name"][0],
-    #                 'username':string_params["username"][0],
-    #                 'phone_number':string_params["phone_number"][0],
-    #                 'type':type_for_user.value,
-    #                 'password':string_params["password"][0]
-    #             }
+#                 data = {
+#                     'id':uuid4().hex,
+#                     'name':string_params["name"][0],
+#                     'username':string_params["username"][0],
+#                     'phone_number':string_params["phone_number"][0],
+#                     'type':type_for_user.value,
+#                     'password':string_params["password"][0]
+#                 }
                 
-    #             logger.info('userType : ', data['type'])
+#                 logger.info('userType : ', data['type'])
                 
-    #             user = UserCreateSerializer(data=data)
-    #             if user.is_valid() :
-    #                 new_user = user.save()
-    #                 return index(request=request, user=new_user)
-    #             logger.error('invalid user params : ', user.errors)
-    #             render(request=request, template_name='user/register.html',context={'validation':user.errors})
-    #     return render(request=request, template_name='user/register.html', context={'validation':'missing payload'})
-    # return render(request=request, template_name='user/register.html')
+#                 user = UserCreateSerializer(data=data)
+#                 if user.is_valid() :
+#                     new_user = user.save()
+#                     return index(request=request, user=new_user)
+#                 logger.error('invalid user params : ', user.errors)
+#                 render(request=request, template_name='user/register.html',context={'validation':user.errors})
+#         return render(request=request, template_name='user/register.html', context={'validation':'missing payload'})
+#     return render(request=request, template_name='user/register.html')
 
 # def login(request):
     # if request.method == 'POST' :

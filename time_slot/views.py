@@ -1,7 +1,9 @@
 from time_slot.models import TimeSlot
-from .serializers import TimeSlotCreateSerializer, TimeSlotUpdateSerializer, TimeSlotReadSerializer
-from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
+from rest_framework import viewsets, permissions, status
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .serializers import TimeSlotCreateSerializer, TimeSlotUpdateSerializer, TimeSlotReadSerializer
+
 import uuid
 import logging
 
@@ -10,8 +12,9 @@ logger_name = "root"
 # Create your views here.
 # TimeSlot ViewSet for basic CRUD Handling
 class TimeSlotViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     queryset = TimeSlot.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:

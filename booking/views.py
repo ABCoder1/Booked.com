@@ -1,8 +1,9 @@
 from booking.models import Booking
-from .serializers import BookingCreateSerializer, BookingReadSerializer
 from django.db import IntegrityError
-from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
+from rest_framework import viewsets, permissions, status
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .serializers import BookingCreateSerializer, BookingReadSerializer
 import uuid
 
 logger_name = "root"
@@ -10,8 +11,9 @@ logger_name = "root"
 # Create your views here.
 # Booking ViewSet for basic CRUD Handling
 class BookingViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     queryset = Booking.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:

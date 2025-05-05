@@ -35,6 +35,4 @@ function erase(){
 	}
 }
 
-document.addEventListener("DOMContentLoaded", function(){
-	type();
-});
+document.addEventListener("DOMContentLoaded", () => type());
