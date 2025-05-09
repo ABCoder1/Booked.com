@@ -14,28 +14,22 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'user:login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'user:register' %}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/">About</a>
+                      <button class="nav-link" id="logout"> Logout </a>
                     </li>
                   </ul>
-            </div> -->
+            </div>
         </div>
     </nav>
 
-    <div id="headingDiv">
-    </div>
+    <div id="customerDiv"></div>
+    <div id="managerDiv"></div>
     
     {% load static %}
     <link rel="stylesheet" href="{% static 'user/index.css' %}">
-    <script type="module" src="{% static 'user/index.js' %}"></script>
+    <script type="module" src="{% static 'user/js/index.js' %}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

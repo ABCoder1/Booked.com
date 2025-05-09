@@ -1,0 +1,10 @@
+export const BASE_URL = "127.0.0.1";
+export const BACKEND_PORT = "8000";
+export const USER_ENDPOINT = "/api/user/";
+export const TOKEN_ENDPOINT = "/api/token/";
+export const ACCESS_COOKIE = "access";
+export const REFRESH_COOKIE = "refresh";
+export const MANAGER_TYPE = "ROOM_MANAGER";
+export const CUSTOMER_TYPE = "CUSTOMER";
+export const LOGIN_PAGE = "/login"
+export const USER_PAGE = "/index"

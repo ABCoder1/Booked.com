@@ -14,8 +14,8 @@
     <p> <button> <a href="{% url 'booking:get_all_rooms' %}"> Delete a Room </a> </button> </p>
 
     {% load static %}
-    <script src="{% static "user/room_manager.js" %}"></script>
-    <link rel="stylesheet" href="{% static "user/room_manager.css" %}">
+    <script type="module" src="{% static 'user/js/room_manager.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'user/room_manager.css' %}">
 
 </body>
 </html>

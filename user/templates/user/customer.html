@@ -11,8 +11,8 @@
     <p> <button> <a href="{% url 'booking:get_all_bookings' %}">Get All Bookings for this customer</a> </button> </p>
 
     {% load static %}
-    <script src="{% static "user/customer.js" %}"></script>
-    <link rel="stylesheet" href="{% static "user/customer.css" %}">
+    <script type="module" src="{% static 'user/js/customer.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'user/customer.css' %}">
 
 </body>
 </html>
