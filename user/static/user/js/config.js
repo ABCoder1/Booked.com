@@ -1,0 +1,15 @@
+export const BASE_URL = "127.0.0.1";
+export const BACKEND_PORT = "8000";
+export const USER_ENDPOINT = "/api/user/";
+export const ROOM_ENDPOINT = "/api/room/";
+export const SLOT_ENDPOINT = "/api/slot/";
+export const TOKEN_ENDPOINT = "/api/token/";
+export const BOOKING_ENDPOINT = "/api/booking/";
+export const ACCESS_COOKIE = "access";
+export const REFRESH_COOKIE = "refresh";
+export const MANAGER_TYPE = "ROOM_MANAGER";
+export const CUSTOMER_TYPE = "CUSTOMER";
+export const LOGIN_PAGE = "/login"
+export const USER_PAGE = "/index"
+export const USER_ROOMS_ENDPOINT = "/api/room/curr-user"
+export const ROOM_SLOTS_ENDPOINT = "/api/slot/curr-user"

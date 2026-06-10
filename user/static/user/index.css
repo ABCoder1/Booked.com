@@ -1,0 +1,107 @@
+body{
+	background-color: white;
+}
+
+.heading{
+	height: 100px;
+	border-style: solid;
+	border-color: purple;
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+h1{
+	color: purple;
+	vertical-align: 50px;
+	/* border-style: solid;
+	border-color: red; */
+	text-align: center;
+}
+
+p {
+	color: black;
+	margin: 15%;
+	text-align: center;
+}
+
+/* Overall Table Container Enhancements */
+.main-container {
+    overflow-x: auto; /* Keep horizontal scrolling */
+    margin: 40px auto; /* Increased top margin and centered */
+    padding: 20px;
+    background-color: #fff; /* Soft white background */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Main Table Styling */
+.main-table {
+    width: 100%; /* Take full width of the container */
+    border-collapse: collapse; /* Single border for cells */
+    border-spacing: 0; /* Remove spacing between cells */
+    font-size: 0.9em; /* Slightly smaller font size */
+    color: #555; /* Darker text color */
+}
+
+/* Table Header Styling */
+.main-table th {
+    background-color: #007bff; /* Primary blue color for header */
+    color: #fff; /* White text on header */
+    font-weight: bold;
+    text-align: left;
+    padding: 12px 15px; /* More padding */
+    border-bottom: 2px solid #0056b3; /* Darker blue for bottom border */
+    text-transform: uppercase; /* Make headers uppercase */
+    letter-spacing: 0.05em; /* Slight letter spacing */
+}
+
+/* Table Data Cell Styling */
+.main-table td {
+    padding: 10px 15px; /* Comfortable padding */
+    border-bottom: 1px solid #eee;
+}
+
+/* Hover Effect on Rows */
+.main-table tbody tr:hover {
+    background-color: #f0f8ff; /* Light blue on hover */
+    cursor: pointer; /* Indicate interactivity */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Zebra Striping (Alternative to your existing one, slightly different color) */
+.main-table tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+/* First and Last Child Row Styling (Optional) */
+.main-table tbody tr:first-child td {
+    border-top: 2px solid #ccc; /* Top border for the first row */
+}
+
+.main-table tbody tr:last-child td {
+    border-bottom: 2px solid #ccc; /* Bottom border for the last row */
+}
+
+/* Styling for Specific Columns (Example - adjust based on your actual keys) */
+.main-table td:nth-child(1) { /* Style the 'name' column */
+    font-weight: bold;
+}
+
+.main-table td:nth-child(3) { /* Style the 'location' column */
+    color: #008000; /* Green color for location */
+}
+
+.main-table td:nth-child(4) { /* Style the 'waiting_period' column */
+    text-align: center; /* Center the waiting period */
+}
+
+/* Responsive Adjustments (Optional - for smaller screens) */
+@media (max-width: 768px) {
+    .main-table {
+        font-size: 0.8em;
+    }
+    .main-table th, .main-table td {
+        padding: 8px 10px;
+    }
+}

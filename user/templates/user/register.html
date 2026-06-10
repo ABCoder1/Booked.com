@@ -39,15 +39,19 @@
 
     <div id="form"></div>
     
-    <form class="row g-3" method="POST" action="{% url 'user:register' %}">
+    <form name="register-form" class="row g-3" method="POST" action="{% url 'user:register' %}">
         {% csrf_token %}
         <div class="col-md-6">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name" required autocomplete="on">
         </div>
         <div class="col-md-6">
             <label for="username" class="form-label">Username</label>
-            <input type="email" class="form-control" id="username" name="username" required>
+            <input type="username" class="form-control" id="username" name="username" required autocomplete="on">
+        </div>
+        <div class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required autocomplete="on">
         </div>
         <div class="col-md-6">
             <label for="phone_number" class="form-label">Phone Number</label>
@@ -70,16 +74,16 @@
 
         <div class="col-md-6"> Already registered? <a href="{% url 'user:login' %}">Login</a> </div>
 
-        {% if validation %}
-        <div>
+        <div id="validation-errors">
             <p> {{ validation }} </p>
         </div>
-        {% endif %}
     </form>
+
+    <script> const csrftoken = "{{ csrf_token }}"; </script>
 
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'user/register.css' %}">
-    <!-- <script src="{% static 'user/register.js' %}"></script> -->
+    <script type="module" src="{% static 'user/js/register.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>

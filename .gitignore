@@ -1,2 +1,7 @@
 myenv
 __pycache__
+
+# node_modules
+node_modules
+
+.DS_Store

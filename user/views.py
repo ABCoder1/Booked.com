@@ -1,11 +1,18 @@
-from django.shortcuts import render, get_object_or_404
+import jwt
+import logging
 from uuid import uuid4
 from urllib.parse import parse_qs
 from .models import User, user_types
-from .serializers import UserCreateSerializer, UserReadSerializer, UserUpdateSerializer
-from rest_framework import viewsets, permissions, status
+from room.models import Room
+from booking.models import Booking
+from room.serializers import RoomReadSerializer
+from booking.serializers import BookingReadSerializer
+from rest_framework.decorators import action
 from rest_framework.response import Response
-import logging
+from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets, permissions, status
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .serializers import UserCreateSerializer, UserReadSerializer, UserUpdateSerializer
 
 logger_name = "root"
 
@@ -13,9 +20,8 @@ logger_name = "root"
 
 # User ViewSet for basic CRUD Handling
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
-    
+
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
             return UserReadSerializer
@@ -23,23 +29,75 @@ class UserViewSet(viewsets.ModelViewSet):
             return UserUpdateSerializer
         return UserCreateSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
+    def get_authenticators(self):
+        if self.request.method == 'POST':
+            return []
+        return [JWTAuthentication()]
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        response_serializer =  UserReadSerializer(user)
+        response_serializer = UserReadSerializer(user)
         headers = self.get_success_headers(response_serializer.data)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)  # Handling partial updates (PATCH)
-        instance = self.get_object() # Gets the user object we are updating from DB
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         response_serializer = UserReadSerializer(instance)
         return Response(response_serializer.data)
 
+    @action(detail=True, methods=['get'], url_path='room')
+    def getRoomsForUser(self, request, pk=None):
+        logger = logging.getLogger(logger_name)
+
+        try:
+            # # TODO: Add encryption to token
+            # token = request.headers['Authorization'].split(" ")[1]
+            # tokenData = jwt.decode(token, options={"verify_signature": False})
+            # logger.info(f"userID : {tokenData['user_id']}")
+            user = self.get_object()
+            rooms = Room.objects.filter(manager=user)
+            roomsDTO = RoomReadSerializer(rooms, many=True)
+            return Response(roomsDTO.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    @action(detail=True, methods=['get'], url_path='booking')
+    def getBookingsForUser(self, request, pk=None):
+        logger = logging.getLogger(logger_name)
+
+        try:
+            # # TODO: Add encryption to token
+            # token = request.headers['Authorization'].split(" ")[1]
+            # tokenData = jwt.decode(token, options={"verify_signature": False})
+            # logger.info(f"userID : {tokenData['user_id']}")
+            user = self.get_object()
+            bookings = None
+            print(user.type)
+            if user.type == user_types.CR.value:
+                print('Customer')
+                bookings = Booking.objects.filter(customer=user)
+            elif user.type == user_types.RM.value:
+                print('Room Manager')
+                bookings = Booking.objects.filter(room__manager=user)
+            else: # Handle cases where user.type is neither CR nor RM
+                bookings = Booking.objects.none() 
+            bookingsDTO = BookingReadSerializer(bookings, many=True)
+            return Response(bookingsDTO.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
 # Views for web flow
 def home(request):
     return render(request=request, template_name='user/homepage.html')
@@ -50,89 +108,5 @@ def register(request):
 def login(request):
     return render(request=request, template_name='user/login.html')
 
-def index(request, user):
-    return render(request=request, template_name='user/index.html', context={'user':user})
-
-# def register(request):
-    # logger = logging.getLogger(logger_name)
-    # if request.method == 'POST' :
-    #     if request.headers.get('Content-Length') != '':
-    #         params = parse_qs(request.body)
-    #         string_params = {}
-    #         for key, val in params.items() :
-    #             string_params[key.decode('utf-8')] = [val_n.decode('utf-8') for val_n in val]
-            
-    #         try:
-    #             existing_user = User.objects.get(username=string_params['username'][0])
-    #             logger.error('username already exists : ', existing_user.username)
-    #             return render(request=request, template_name='user/register.html', context={'validation':'username already exists, please try something else'})
-    #         except User.DoesNotExist:
-    #             type_param = string_params["user_type"][0]
-    #             if type_param == 'customer' :
-    #                 type_for_user = user_types.CR
-    #             elif type_param == 'manager' :
-    #                 type_for_user = user_types.RM
-    #             else :
-    #                 return render(request=request, template_name='user/register.html', context={'validation':'invalid user type, please try again'})
-                
-    #             data = {
-    #                 'id':uuid4().hex,
-    #                 'name':string_params["name"][0],
-    #                 'username':string_params["username"][0],
-    #                 'phone_number':string_params["phone_number"][0],
-    #                 'type':type_for_user.value,
-    #                 'password':string_params["password"][0]
-    #             }
-                
-    #             logger.info('userType : ', data['type'])
-                
-    #             user = UserCreateSerializer(data=data)
-    #             if user.is_valid() :
-    #                 new_user = user.save()
-    #                 return index(request=request, user=new_user)
-    #             logger.error('invalid user params : ', user.errors)
-    #             render(request=request, template_name='user/register.html',context={'validation':user.errors})
-    #     return render(request=request, template_name='user/register.html', context={'validation':'missing payload'})
-    # return render(request=request, template_name='user/register.html')
-
-# def login(request):
-    # if request.method == 'POST' :
-    #     if request.headers.get('Content-Length') != '':
-    #         params = parse_qs(request.body)
-    #         request_dto = {}
-    #         for key, val in params.items() :
-    #             request_dto[key.decode('utf-8')] = val[0].decode('utf-8')
-            
-    #         try:
-    #             user = User.objects.get(username=request_dto['username'])
-    #         except User.DoesNotExist:
-    #             return render(request=request, template_name='user/login.html',context={'validation':'user doesnt exist, try registering first'})
-    #         else:
-    #             if user.password == request_dto['password'] :
-    #                 return index(request=request, user=user)
-    #             else:
-    #                 return render(request=request, template_name='user/login.html',context={'validation':'invalid username/password'})
-    #     return render(request=request, template_name='user/login.html',context={'validation':'missing payload'})
-    # return render(request=request, template_name='user/login.html')
-
-# def index(request, user):
-    # logger = logging.getLogger(logger_name)
-    # if user.type == user_types.CR.value :
-    #     logger.info('customer login')
-    #     return render(request=request, template_name='user/customer.html', context={'user':user})
-    # elif user.type == user_types.RM.value :
-    #     logger.info('room manager login')
-    #     return render(request=request, template_name='user/room_manager.html', context={'user':user})
-    # logger.error('didnt match')
-    # return render(request=request, template_name='user/index.html', context={'user':user})
-
-# def get_user(request, user_id):
-#     user = get_object_or_404(User, pk=user_id)
-#     return render(request=request, template_name='user/userdetails.html', context={'user':user})
-
-# def get_all_users(request):
-#     latest_users =  User.objects.order_by('id')
-#     context = {
-#         'latest_users':latest_users,
-#     }
-#     return render(request=request, template_name='user/allusers.html', context=context)
+def index(request):
+    return render(request=request, template_name='user/index.html')

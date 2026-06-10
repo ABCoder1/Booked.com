@@ -34,11 +34,11 @@
         <h1 > Login </h1>
     </div>
     
-    <form method="post" action="{% url 'user:login' %}" enctype="application/x-www-form-urlencoded" accept-charset="UTF-8">
+    <form name="login-form" method="post" action="{% url 'user:login' %}" enctype="application/x-www-form-urlencoded" accept-charset="UTF-8">
         {% csrf_token %}
         <p>
         <label for="username">Username</label>
-        <input type="email" id="username" name="username" required>
+        <input type="username" id="username" name="username" required autocomplete="on">
         
         <br><br>
         
@@ -47,32 +47,19 @@
 
         <br><br>
 
-        <button type="submit" class="btn btn-outline-success">Submit</button>
+        <button name="submit" type="submit" class="btn btn-outline-success">Submit</button>
 
         <div> New Here? <a href="{% url 'user:register' %}">SignUp</a> </div>
 
-        {% if validation %}
-        <div>
-            <p> {{ validation }} </p>
+        <div id="validation-errors">
         </div>
-        {% endif %}
-        <!-- <input type="hidden" name="next" value="{{ next }}">
-
-        </p>
-
-        
-        {% if form.errors %}
-            <p> There's something wrong with what you have just entered! </p>
-        {% endif %}
-
-        {% if next %}
-            <p>Hey, you can't access that page.</p>
-        {% endif %} -->
-
     </form>
+
+    <script> const csrftoken = "{{ csrf_token }}"; </script>
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'user/login.css' %}">
+    <script type="module" src="{% static 'user/js/login.js' %}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
