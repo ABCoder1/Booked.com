@@ -7,12 +7,12 @@ from room.models import Room
 # Serializer for object creation
 class TimeSlotCreateSerializer(serializers.ModelSerializer):
     room = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all())
-    start_time = serializers.TimeField(format='%I:%M %p', input_formats=['%I:%M %p', '%H:%M', '%I:%M%p', '%I:%M %P', '%H:%M:%S'])  # Input/Output in 12-hour format
-    end_time = serializers.TimeField(format='%I:%M %p', input_formats=['%I:%M %p', '%H:%M', '%I:%M%p', '%I:%M %P', '%H:%M:%S'])    # Input/Output in 12-hour format
+    start_time = serializers.TimeField()
+    end_time = serializers.TimeField()
 
     class Meta:
         model = TimeSlot
-        exclude = ['id']
+        fields = '__all__'
 
     def create(self, validated_data):
         room = validated_data.pop('room')
@@ -23,8 +23,8 @@ class TimeSlotCreateSerializer(serializers.ModelSerializer):
 # Can skip optional arguments while updating the model object
 class TimeSlotUpdateSerializer(serializers.ModelSerializer):
     room = serializers.ReadOnlyField()
-    start_time = serializers.TimeField(format='%I:%M %p', input_formats=['%I:%M %p', '%H:%M', '%I:%M%p', '%I:%M %P', '%H:%M:%S'])  # Input/Output in 12-hour format
-    end_time = serializers.TimeField(format='%I:%M %p', input_formats=['%I:%M %p', '%H:%M', '%I:%M%p', '%I:%M %P', '%H:%M:%S'])    # Input/Output in 12-hour format
+    start_time = serializers.TimeField()
+    end_time = serializers.TimeField()
 
     class Meta:
         model = TimeSlot
@@ -32,9 +32,9 @@ class TimeSlotUpdateSerializer(serializers.ModelSerializer):
     
 # Same serializer for both list and retrieve
 class TimeSlotReadSerializer(serializers.ModelSerializer):
-    start_time = serializers.TimeField(format='%I:%M %p', input_formats=['%I:%M %p', '%H:%M', '%I:%M%p', '%I:%M %P', '%H:%M:%S'])  # Input/Output in 12-hour format
-    end_time = serializers.TimeField(format='%I:%M %p', input_formats=['%I:%M %p', '%H:%M', '%I:%M%p', '%I:%M %P', '%H:%M:%S'])    # Input/Output in 12-hour format
-
+    start_time = serializers.TimeField()
+    end_time = serializers.TimeField()
+    
     class Meta:
         model = TimeSlot
-        fields = ['start_time', 'end_time']
+        exclude = ['room']

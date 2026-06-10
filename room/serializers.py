@@ -41,4 +41,4 @@ class RoomUpdateSerializer(serializers.ModelSerializer):
 class RoomReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-        fields = ['manager_id', 'description', 'location', 'waiting_period']
+        fields = ['id', 'name', 'description', 'location', 'waiting_period']

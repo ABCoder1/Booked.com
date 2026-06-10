@@ -14,7 +14,7 @@ class BookingCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        exclude = ['id']
+        fields = '__all__'
 
     def create(self, validated_data):
         customer = validated_data.pop('customer')
@@ -44,4 +44,4 @@ class BookingCreateSerializer(serializers.ModelSerializer):
 class BookingReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['room', 'customer', 'slot']
+        fields = '__all__'

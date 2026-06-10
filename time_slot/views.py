@@ -1,4 +1,6 @@
+import jwt
 from time_slot.models import TimeSlot
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -17,7 +19,7 @@ class TimeSlotViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'getSlotsForRoom']:
             return TimeSlotReadSerializer
         elif self.action == 'update':
             return TimeSlotUpdateSerializer
